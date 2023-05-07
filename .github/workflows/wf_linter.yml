@@ -1,0 +1,74 @@
+---
+#################################
+#################################
+## Super Linter GitHub Actions ##
+#################################
+#################################
+name: Lint Code Base
+
+on:
+  workflow_call:
+
+###############
+# Set the Job #
+###############
+jobs:
+  build:
+    # Name the Job
+    name: Lint Code Base
+    # Set the agent to run on
+    runs-on: ubuntu-latest
+
+    ##################
+    # Load all steps #
+    ##################
+    steps:
+      ##########################
+      # Checkout the code base #
+      ##########################
+      - name: Checkout Code
+        uses: actions/checkout@v3
+        with:
+          # Full git history is needed to get a proper list of changed files within `super-linter`
+          fetch-depth: 0
+
+      #####################################
+      # Load custom environment variables #
+      #####################################
+      - name: "Load linter env"
+        shell: bash
+        env:
+          CONFIG_DIR: ".github/linters"
+          FILE_EXTENSION: "var"
+        run: |
+          # ==================== Load Environmenmt Variables ====================
+          echo "Working directory: $(pwd)"
+          if [ -d "${CONFIG_DIR}" ]; then
+            echo "Scanning directory '${CONFIG_DIR}' ..."
+            find "${CONFIG_DIR}" -name '*.var' -type 'f' -print0 | while IFS= read -d '' -r item ; do
+              echo "Found settings file '${item}'."
+              basename="${item##*/}"
+              envname="${basename%.${{ env.FILE_EXTENSION }}}"
+              envname="${envname//-/_}"
+              echo "Setting environment variable '${envname}' ..."
+              random_delimiter=$(echo $RANDOM | md5sum | head -c 20)
+              {
+                echo "${envname}<<${random_delimiter}"
+                cat "${item}"
+                echo
+                echo "${random_delimiter}"
+              } >> "$GITHUB_ENV"
+            done
+          else
+            echo "Directory '${CONFIG_DIR}' does not exist."
+          fi
+
+      ################################
+      # Run Linter against code base #
+      ################################
+      - name: Lint Code Base
+        uses: super-linter/super-linter@v5
+        env:
+          VALIDATE_ALL_CODEBASE: true
+          DEFAULT_BRANCH: main
+          VALIDATE_NATURAL_LANGUAGE: false

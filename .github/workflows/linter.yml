@@ -1,0 +1,14 @@
+---
+name: "Lint Code Base"
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  linter:
+    name: "Lint Code Base"
+    uses: pacroy/.github/.github/workflows/wf_linter.yml@v1
