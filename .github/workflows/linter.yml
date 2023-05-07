@@ -10,5 +10,6 @@ on:
 
 jobs:
   linter:
+    if: ${{ github.repository == 'pacroy/.github' }}
     name: "Lint Code Base"
     uses: ./.github/workflows/wf_linter.yml

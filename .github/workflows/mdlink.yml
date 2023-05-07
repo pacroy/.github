@@ -10,5 +10,6 @@ on:
 
 jobs:
   markdown-link-check:
+    if: ${{ github.repository == 'pacroy/.github' }}
     name: Check Markdown Links
     uses: ./.github/workflows/wf_mdlink.yml
