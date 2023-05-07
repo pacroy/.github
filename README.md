@@ -15,7 +15,7 @@ Note: This sync process is designed to work well with [GitHub Flow](https://docs
 
 ## User Guide
 
-### Automatic Way
+### Sync in Automatic Way
 
 To sync all common workflow YAML files to your target repository:
 
@@ -25,11 +25,17 @@ To sync all common workflow YAML files to your target repository:
 
 3. Push an empty commit as needed to trigger all synced workflows.
 
-### Manual Way
+### Sync Manual Way
 
 1. Copy all [common workflow files](#common-workflows) to folder `.github/workflows` in the target repository.
 
 2. Commit and push to trigger all workflows.
+
+### Customize Linters
+
+You can customize linters in each target repository by setting additional environment variables according to the [linter documentation](https://github.com/super-linter/super-linter/blob/main/README.md). An environment variable can be set by creating a file named `ENVIRONMENT_NAME.var` in the folder `.github/linters` within your target repository.
+
+For example, if you want to disable KUBECONFORM linter, create file `VALIDATE_KUBERNETES_KUBECONFORM.var` with value `false` as the content. Put the file in the folder `.github/linters` within your target repository. All variables files will be automatically loaded and used by the linters.
 
 ## Maintainer Guide
 
