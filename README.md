@@ -25,7 +25,33 @@ To sync all common workflow YAML files to your target repository:
 
 3. Push an empty commit as needed to trigger all synced workflows.
 
-### Sync Manual Way
+### Sync using SSH
+
+If you get an issue pushing changes to your target repository or you prefer to push using SSH key then follow this extra instruction:
+
+1. Make sure you have followed instruction in [Sync in Automatic Way](#sync-in-automatic-way).
+
+2. Create a new SSH key:
+
+    ```sh
+    ssh-keygen -t rsa -b 4096 -f id_rsa -N "" -C "your_repository@github.com/your_org"
+    ```
+
+    This will generate two files containing private (`id_rsa`) and public key (`id_rsa.pub`).
+
+3. Use command `cat id_rsa.pub` to show the public key.
+
+4. Add public key to the target repository's [Deploy keys](https://docs.github.com/en/authentication/connecting-to-github-with-ssh/managing-deploy-keys#deploy-keys).
+
+5. Use command `cat id_rsa` to show the private key.
+
+6. Create a new secret in the target reposity named `SYNC_SSH_KEY` with private key as the value.
+
+7. Trigger the workflow.
+
+8. Once everything is working, you may remove both SSK key files.
+
+### Sync in Manual Way
 
 1. Copy all [common workflow files](#common-workflows) to folder `.github/workflows` in the target repository.
 

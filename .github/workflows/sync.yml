@@ -19,6 +19,7 @@ jobs:
         with:
           path: 'target'
           ref: ${{ github.head_ref }}
+          ssh-key: ${{ secrets.SYNC_SSH_KEY }}
       - name: Determine Ref
         id: get_ref
         shell: bash
