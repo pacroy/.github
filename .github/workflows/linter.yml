@@ -16,5 +16,6 @@ permissions:
 jobs:
   linter:
     name: "Lint Code Base"
-    uses: pacroy/gh-common-workflows/.github/workflows/wf_linter.yml@v1
-    secrets: inherit
+    uses: ./.github/workflows/wf_linter.yml
+    secrets:
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
