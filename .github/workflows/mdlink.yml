@@ -16,4 +16,4 @@ jobs:
   check_mdlink:
     if: ${{ github.repository != 'pacroy/.github' }}
     name: Check Markdown Links
-    uses: pacroy/.github/.github/workflows/wf_mdlink.yml
+    uses: pacroy/.github/.github/workflows/wf_mdlink.yml@main
