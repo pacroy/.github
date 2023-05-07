@@ -12,8 +12,8 @@ jobs:
     name: Sync Repository 1
     runs-on: ubuntu-latest
     env:
-      TARGET_REPO: ExxonMobil/par.github
-      TARGET_REF: refs/heads/main
+      TARGET_REPO: ${{ vars.SYNC_REPO_TARGET_REPO_1 }}
+      TARGET_REF: ${{ vars.SYNC_REPO_TARGET_REF_1 }}
     steps:
       - name: Checkout Target
         uses: actions/checkout@v3
