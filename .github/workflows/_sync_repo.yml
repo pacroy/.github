@@ -1,0 +1,69 @@
+name: Sync Repository
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  sync_repo_1:
+    name: Sync Repository 1
+    runs-on: ubuntu-latest
+    env:
+      TARGET_REPO: ExxonMobil/par.github
+      TARGET_REF: refs/heads/main
+    steps:
+      - name: Checkout Target
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ env.TARGET_REPO }}
+          path: 'target'
+          ref: ${{ env.TARGET_REF }}
+          ssh-key: ${{ secrets.SYNC_REPO_SSH_KEY_1 }}
+      - name: Checkout Source
+        uses: actions/checkout@v3
+        with:
+          path: 'source'
+      - name: Print files and directories
+        shell: bash
+        run: tree -aI "\.git" "$(pwd)"
+      - name: Sync files
+        shell: bash
+        run: |
+          rsync --recursive --exclude=".git/*" "source/" "target"
+      - name: Update Repo Name
+        uses: jacobtomlinson/gha-find-replace@v3
+        with:
+          find: "pacroy/.github"
+          replace: ${{ env.TARGET_REPO }}
+          regex: false
+          include: 'target/**'
+      - name: Create Job Summary
+        shell: bash
+        run: |
+          {
+            cd target
+            git add .
+            synced_files="$(git status --porcelain)"
+
+            if [ -z "${synced_files}" ]; then
+              echo ":smile: No change detected. Everything is already in sync."
+            else
+              echo ":sunglasses: The following changes have been made:"
+              echo "\`\`\`console"
+              echo "${synced_files}"
+              echo "\`\`\`"
+            fi
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Commit and push
+        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+        shell: bash
+        run: |
+          cd target
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          if git commit -m "[AUTO] Sync repository"; then
+            git push
+          fi
