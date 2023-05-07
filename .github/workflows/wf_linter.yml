@@ -8,9 +8,6 @@ name: Lint Code Base
 
 on:
   workflow_call:
-    secrets:
-      GITHUB_TOKEN:
-        required: true
 
 ###############
 # Set the Job #

@@ -17,5 +17,3 @@ jobs:
   linter:
     name: "Lint Code Base"
     uses: ./.github/workflows/wf_linter.yml
-    secrets:
-      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
