@@ -32,8 +32,7 @@ jobs:
       - name: Sync files
         shell: bash
         run: |
-          folder=".github"
-          rsync --recursive "source/${folder}/" "target/${folder}"
+          rsync --recursive --exclude=".git/*" "source/" "target"
       - name: Update Repo Name
         uses: jacobtomlinson/gha-find-replace@v3
         with:
