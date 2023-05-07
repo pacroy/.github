@@ -17,7 +17,9 @@ Note: This sync process is designed to work well with [GitHub Flow](https://docs
 
 ### Automatic Way
 
-1. In target repository, create a new workflow file `.github/workflows/sync.yml` with the content from [Sync Files workflow](.github/workflows/sync.yml) workflow.
+To sync all common workflow YAML files to your target repository:
+
+1. In the target repository, create a new workflow file `.github/workflows/sync.yml` with the content from [Sync Files workflow](.github/workflows/sync.yml) workflow.
 
 2. Commit, push, and create a new Pull Request. The Sync Files workflow will run and automatically sync all other workflow files.
 
@@ -25,6 +27,21 @@ Note: This sync process is designed to work well with [GitHub Flow](https://docs
 
 ### Manual Way
 
-1. Copy all [common workflow files](#common-workflows) to folder `.github/workflows` in your target repository.
+1. Copy all [common workflow files](#common-workflows) to folder `.github/workflows` in the target repository.
 
 2. Commit and push to trigger all workflows.
+
+## Maintainer Guide
+
+To get the workflows run with latest codes from your branches:
+
+1. Create branch and make changes.
+
+2. Force update and push tag first.
+
+    ```sh
+    git tag -am "v1" v1 --force
+    git push origin v1 --force
+    ```
+
+3. Commit and push the changes.
