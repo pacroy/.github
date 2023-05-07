@@ -1,5 +1,5 @@
 ---
-name: "Lint Code BaseXX"
+name: "Lint Code Base"
 
 on:
   workflow_dispatch:

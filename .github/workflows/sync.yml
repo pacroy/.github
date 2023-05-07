@@ -22,6 +22,7 @@ jobs:
       - name: Determine Ref
         id: get_ref
         shell: bash
+        if: ${{ github.repository != env.SOURCE_REPO }}
         run: |
           echo "ref=$SOURCE_REF" >> "$GITHUB_OUTPUT"
       - name: Checkout Source

@@ -1,5 +1,5 @@
 ---
-name: Check Markdown Links XX
+name: Check Markdown Links
 
 on:
   workflow_dispatch:
