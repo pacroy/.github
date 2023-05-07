@@ -16,4 +16,4 @@ jobs:
   linter:
     if: ${{ github.repository != 'pacroy/.github' }}
     name: "Lint Code Base"
-    uses: pacroy/.github/.github/workflows/wf_linter.yml@main
+    uses: pacroy/.github/.github/workflows/wf_linter.yml@v1
