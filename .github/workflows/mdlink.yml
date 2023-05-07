@@ -9,7 +9,11 @@ on:
     branches: [main]
 
 jobs:
-  markdown-link-check:
+  check_mdlink_own:
     if: ${{ github.repository == 'pacroy/.github' }}
     name: Check Markdown Links
     uses: ./.github/workflows/wf_mdlink.yml
+  check_mdlink:
+    if: ${{ github.repository != 'pacroy/.github' }}
+    name: Check Markdown Links
+    uses: pacroy/.github/.github/workflows/wf_mdlink.yml

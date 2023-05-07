@@ -9,7 +9,11 @@ on:
     branches: [main]
 
 jobs:
-  linter:
+  linter_own:
     if: ${{ github.repository == 'pacroy/.github' }}
     name: "Lint Code Base"
     uses: ./.github/workflows/wf_linter.yml
+  linter:
+    if: ${{ github.repository != 'pacroy/.github' }}
+    name: "Lint Code Base"
+    uses: pacroy/.github/.github/workflows/wf_linter.yml@v1
