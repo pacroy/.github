@@ -13,8 +13,8 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET_REPO: ${{ vars.SYNC_REPO_TARGET_REPO_1 }}
-      TARGET_SOURCE_BRANCH: ${{ vars.SYNC_REPO_TARGET_SOURCE_BRANCH_1 }}
-      TARGET_RELEASE_BRANCH: ${{ vars.SYNC_REPO_TARGET_RELEASE_BRANCH_1 }}
+      TARGET_SOURCE_BRANCH: main
+      TARGET_RELEASE_BRANCH: v1
     steps:
       - name: Checkout Target
         uses: actions/checkout@v3
