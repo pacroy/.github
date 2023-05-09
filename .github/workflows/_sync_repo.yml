@@ -74,18 +74,18 @@ jobs:
         shell: bash
         working-directory: target
         run: |
-          git push origin ${TARGET_SOURCE_BRANCH}
+          git push origin "${TARGET_SOURCE_BRANCH}"
       - name: Merge to Release Branch
         id: merge
         shell: bash
         working-directory: target
         run: |
-          git checkout -b ${TARGET_RELEASE_BRANCH}
-          git pull origin ${TARGET_RELEASE_BRANCH}
-          git merge ${TARGET_SOURCE_BRANCH}
+          git checkout -b "${TARGET_RELEASE_BRANCH}"
+          git pull origin "${TARGET_RELEASE_BRANCH}"
+          git merge "${TARGET_SOURCE_BRANCH}"
       - name: Push Release Branch
         if: ${{ steps.merge.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
         shell: bash
         working-directory: target
         run: |
-          git push origin ${TARGET_RELEASE_BRANCH}
+          git push origin "${TARGET_RELEASE_BRANCH}"
