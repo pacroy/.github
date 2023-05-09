@@ -57,13 +57,19 @@ jobs:
               echo "\`\`\`"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Commit and push
-        if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      - name: Commit
+        id: commit
         shell: bash
         run: |
           cd target
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          if git commit -m "[AUTO] Sync repository"; then
-            git push
+          git commit -m "[AUTO] Sync repository"
+          if [ $? -eq 0 ]; then
+            echo "result=true" >> "$GITHUB_OUTPUT"
           fi
+      - name: Push
+        if: ${{ steps.commit.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
+        shell: bash
+        run: |
+            git push
