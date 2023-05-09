@@ -23,6 +23,8 @@ jobs:
       - name: Merge
         shell: bash
         run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git checkout -b ${RELEASE_BRANCH}
           git pull origin ${RELEASE_BRANCH}
           git merge ${SOURCE_BRANCH}
@@ -30,6 +32,4 @@ jobs:
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git push origin ${RELEASE_BRANCH}
