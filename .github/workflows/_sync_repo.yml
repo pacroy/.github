@@ -13,14 +13,15 @@ jobs:
     runs-on: ubuntu-latest
     env:
       TARGET_REPO: ${{ vars.SYNC_REPO_TARGET_REPO_1 }}
-      TARGET_REF: ${{ vars.SYNC_REPO_TARGET_REF_1 }}
+      TARGET_SOURCE_BRANCH: ${{ vars.SYNC_REPO_TARGET_SOURCE_BRANCH_1 }}
+      TARGET_RELEASE_BRANCH: ${{ vars.SYNC_REPO_TARGET_RELEASE_BRANCH_1 }}
     steps:
       - name: Checkout Target
         uses: actions/checkout@v3
         with:
           repository: ${{ env.TARGET_REPO }}
           path: 'target'
-          ref: ${{ env.TARGET_REF }}
+          ref: refs/heads/${{ env.TARGET_SOURCE_BRANCH }}
           ssh-key: ${{ secrets.SYNC_REPO_SSH_KEY_1 }}
       - name: Checkout Source
         uses: actions/checkout@v3
@@ -42,9 +43,9 @@ jobs:
           include: 'target/**'
       - name: Create Job Summary
         shell: bash
+        working-directory: target
         run: |
           {
-            cd target
             git add .
             synced_files="$(git status --porcelain)"
 
@@ -57,19 +58,34 @@ jobs:
               echo "\`\`\`"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Commit
+      - name: Commit to Source Branch
         id: commit
         shell: bash
+        working-directory: target
         run: |
-          cd target
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "[AUTO] Sync repository"
           if [ $? -eq 0 ]; then
             echo "result=true" >> "$GITHUB_OUTPUT"
           fi
-      - name: Push
+      - name: Push Source Branch
         if: ${{ steps.commit.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
         shell: bash
+        working-directory: target
         run: |
-            git push
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git push origin ${TARGET_SOURCE_BRANCH}
+      - name: Merge to Release Branch
+        id: merge
+        shell: bash
+        working-directory: target
+        run: |
+          git checkout -b ${TARGET_RELEASE_BRANCH}
+          git pull origin ${TARGET_RELEASE_BRANCH}
+          git merge ${TARGET_SOURCE_BRANCH}
+      - name: Push Source Branch
+        if: ${{ steps.merge.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
+        shell: bash
+        working-directory: target
+        run: |
+          git push origin ${TARGET_RELEASE_BRANCH}
