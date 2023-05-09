@@ -62,18 +62,3 @@ If you get an issue pushing changes to your target repository or you prefer to p
 You can customize linters in each target repository by setting additional environment variables according to the [linter documentation](https://github.com/super-linter/super-linter/blob/main/README.md). An environment variable can be set by creating a file named `ENVIRONMENT_NAME.var` in the folder `.github/linters` within your target repository.
 
 For example, if you want to disable KUBECONFORM linter, create file `VALIDATE_KUBERNETES_KUBECONFORM.var` with value `false` as the content. Put the file in the folder `.github/linters` within your target repository. All variables files will be automatically loaded and used by the linters.
-
-## Maintainer Guide
-
-To get the workflows run with latest codes from your branches:
-
-1. Create branch and make changes.
-
-2. Force update and push tag first.
-
-    ```sh
-    git tag -am "v1" v1 --force
-    git push origin v1 --force
-    ```
-
-3. Commit and push the changes.
