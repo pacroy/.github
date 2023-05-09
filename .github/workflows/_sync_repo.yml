@@ -66,7 +66,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "[AUTO] Sync repository"
-          if [ $? -eq 0 ]; then
+          if mycmd; then
             echo "result=true" >> "$GITHUB_OUTPUT"
           fi
       - name: Push Source Branch
