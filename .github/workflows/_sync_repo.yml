@@ -73,16 +73,3 @@ jobs:
         working-directory: target
         run: |
           git push origin "${TARGET_SOURCE_BRANCH}"
-      - name: Merge to Release Branch
-        shell: bash
-        working-directory: target
-        run: |
-          git fetch --no-tags origin "+refs/heads/${TARGET_RELEASE_BRANCH}:refs/remotes/origin/${TARGET_RELEASE_BRANCH}"
-          git checkout -B "${TARGET_RELEASE_BRANCH}" "refs/remotes/origin/${TARGET_RELEASE_BRANCH}"
-          git merge "${TARGET_SOURCE_BRANCH}"
-      - name: Push Release Branch
-        if: ${{ github.ref == 'refs/heads/main' }}
-        shell: bash
-        working-directory: target
-        run: |
-          git push origin "${TARGET_RELEASE_BRANCH}"
