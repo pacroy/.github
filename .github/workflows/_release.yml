@@ -17,11 +17,10 @@ jobs:
     steps:
       - name: Checkout Self
         uses: actions/checkout@v3
-        with:
-          ref: refs/heads/${{ env.TARGET_REPO }}
       - name: Merge
         shell: bash
         run: |
+          git checkout ${RELEASE_BRANCH}
           git merge main
       - name: Push
         if: ${{ github.ref == 'refs/heads/main' }}
