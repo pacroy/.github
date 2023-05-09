@@ -23,6 +23,7 @@ jobs:
           path: 'target'
           ref: refs/heads/${{ env.TARGET_SOURCE_BRANCH }}
           ssh-key: ${{ secrets.SYNC_REPO_SSH_KEY_1 }}
+          fetch-depth: 0
       - name: Checkout Source
         uses: actions/checkout@v3
         with:
@@ -59,32 +60,28 @@ jobs:
             fi
           } >> "$GITHUB_STEP_SUMMARY"
       - name: Commit to Source Branch
-        id: commit
         shell: bash
         working-directory: target
+        continue-on-error: true
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "[AUTO] Sync repository"
-          if mycmd; then
-            echo "result=true" >> "$GITHUB_OUTPUT"
-          fi
       - name: Push Source Branch
-        if: ${{ steps.commit.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
         working-directory: target
         run: |
           git push origin "${TARGET_SOURCE_BRANCH}"
       - name: Merge to Release Branch
-        id: merge
         shell: bash
         working-directory: target
         run: |
-          git checkout -b "${TARGET_RELEASE_BRANCH}"
-          git pull origin "${TARGET_RELEASE_BRANCH}"
+          git fetch --no-tags origin "+refs/heads/${TARGET_RELEASE_BRANCH}:refs/remotes/origin/${TARGET_RELEASE_BRANCH}"
+          git checkout -B "${TARGET_RELEASE_BRANCH}" "refs/remotes/origin/${TARGET_RELEASE_BRANCH}"
           git merge "${TARGET_SOURCE_BRANCH}"
       - name: Push Release Branch
-        if: ${{ steps.merge.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
         working-directory: target
         run: |
