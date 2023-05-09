@@ -76,8 +76,8 @@ jobs:
         shell: bash
         working-directory: target
         run: |
-          git checkout -b "${TARGET_RELEASE_BRANCH}"
-          git pull origin "${TARGET_RELEASE_BRANCH}"
+          git fetch --no-tags origin "+refs/heads/${TARGET_RELEASE_BRANCH}:refs/remotes/origin/${TARGET_RELEASE_BRANCH}"
+          git checkout -B "${TARGET_RELEASE_BRANCH}" "refs/remotes/origin/${TARGET_RELEASE_BRANCH}"
           git merge "${TARGET_SOURCE_BRANCH}"
       - name: Push Release Branch
         if: ${{ github.ref == 'refs/heads/main' }}

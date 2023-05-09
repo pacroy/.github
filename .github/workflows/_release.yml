@@ -25,9 +25,8 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git config pull.rebase false
-          git checkout -b "${RELEASE_BRANCH}"
-          git pull origin "${RELEASE_BRANCH}"
+          git fetch --no-tags origin "+refs/heads/${RELEASE_BRANCH}:refs/remotes/origin/${RELEASE_BRANCH}"
+          git checkout -B "${RELEASE_BRANCH}" "refs/remotes/origin/${RELEASE_BRANCH}"
           git merge "${SOURCE_BRANCH}"
       - name: Push
         if: ${{ github.ref == 'refs/heads/main' }}
