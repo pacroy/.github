@@ -63,6 +63,8 @@ jobs:
         shell: bash
         working-directory: target
         run: |
+          git config --local user.name "github-actions[bot]"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "[AUTO] Sync repository"
           if [ $? -eq 0 ]; then
             echo "result=true" >> "$GITHUB_OUTPUT"
@@ -72,8 +74,6 @@ jobs:
         shell: bash
         working-directory: target
         run: |
-          git config --local user.name "github-actions[bot]"
-          git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git push origin ${TARGET_SOURCE_BRANCH}
       - name: Merge to Release Branch
         id: merge
