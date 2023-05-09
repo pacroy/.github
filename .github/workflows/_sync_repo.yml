@@ -83,7 +83,7 @@ jobs:
           git checkout -b ${TARGET_RELEASE_BRANCH}
           git pull origin ${TARGET_RELEASE_BRANCH}
           git merge ${TARGET_SOURCE_BRANCH}
-      - name: Push Source Branch
+      - name: Push Release Branch
         if: ${{ steps.merge.outputs.result == 'true' && github.ref == 'refs/heads/main' }}
         shell: bash
         working-directory: target
