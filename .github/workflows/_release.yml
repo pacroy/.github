@@ -20,6 +20,7 @@ jobs:
       - name: Merge
         shell: bash
         run: |
+          git pull origin ${RELEASE_BRANCH}
           git checkout ${RELEASE_BRANCH}
           git merge main
       - name: Push
