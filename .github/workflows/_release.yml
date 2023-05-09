@@ -8,6 +8,7 @@ on:
   workflow_dispatch:
 
 env:
+  SOURCE_BRANCH: main
   RELEASE_BRANCH: v1
 
 jobs:
@@ -17,12 +18,14 @@ jobs:
     steps:
       - name: Checkout Self
         uses: actions/checkout@v3
+        with:
+          ref: refs/heads/${{ env.SOURCE_BRANCH }}
       - name: Merge
         shell: bash
         run: |
           git checkout -b ${RELEASE_BRANCH}
           git pull origin ${RELEASE_BRANCH}
-          git merge main
+          git merge ${{ env.SOURCE_BRANCH }}
       - name: Push
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
