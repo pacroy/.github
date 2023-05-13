@@ -59,14 +59,29 @@ jobs:
               echo "\`\`\`"
             fi
           } >> "$GITHUB_STEP_SUMMARY"
+      - name: Get Commit Message
+        id: get_commit_msg
+        shell: bash
+        working-directory: source
+        run: |
+          commit_msg=$(git log --no-merges -1 --pretty=format:"%s%n%n%b")
+          random_delimiter=$(echo $RANDOM | md5sum | head -c 20)
+          {
+            echo "commit_msg<<${random_delimiter}"
+            echo "${commit_msg}"
+            echo
+            echo "${random_delimiter}"
+          } >> "$GITHUB_OUTPUT"
       - name: Commit to Source Branch
         shell: bash
         working-directory: target
         continue-on-error: true
+        env:
+          COMMIT_MSG: ${{ steps.get_commit_msg.outputs.commit_msg }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "[AUTO] Sync repository"
+          git commit -m "${COMMIT_MSG}"
       - name: Push Source Branch
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
