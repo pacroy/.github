@@ -92,6 +92,10 @@ jobs:
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          echo "::group::Commit message"
+          echo "${COMMIT_MSG}"
+          echo
+          echo "::endgroup::"
           git commit -m "${COMMIT_MSG}"
           echo "::group::Commit detail"
           git show --pretty=short HEAD
