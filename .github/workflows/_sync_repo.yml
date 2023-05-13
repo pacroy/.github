@@ -82,9 +82,9 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "${COMMIT_MSG}"
-          echo "group::Commit detail"
+          echo "::group::Commit detail"
           git show --pretty=short HEAD
-          echo "endgroup::"
+          echo "::endgroup::"
       - name: Push to Target
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
