@@ -94,7 +94,7 @@ jobs:
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "${COMMIT_MSG}"
           echo "::group::Commit detail"
-          git show --pretty=short HEAD
+          git show HEAD
           echo
           echo "::endgroup::"
       - name: Push to Target
