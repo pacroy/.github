@@ -79,6 +79,10 @@ jobs:
             echo
             echo "${random_delimiter}"
           } >> "$GITHUB_OUTPUT"
+          echo "::group::Commit message"
+          echo "${commit_msg}"
+          echo
+          echo "::endgroup::"
       - name: Commit to Target
         shell: bash
         working-directory: target
@@ -91,6 +95,7 @@ jobs:
           git commit -m "${COMMIT_MSG}"
           echo "::group::Commit detail"
           git show --pretty=short HEAD
+          echo
           echo "::endgroup::"
       - name: Push to Target
         if: ${{ github.ref == 'refs/heads/main' }}
