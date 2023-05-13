@@ -72,7 +72,7 @@ jobs:
             echo
             echo "${random_delimiter}"
           } >> "$GITHUB_OUTPUT"
-      - name: Commit to Source Branch
+      - name: Commit to Target
         shell: bash
         working-directory: target
         continue-on-error: true
@@ -82,7 +82,7 @@ jobs:
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git commit -m "${COMMIT_MSG}"
-      - name: Push Source Branch
+      - name: Push to Target
         if: ${{ github.ref == 'refs/heads/main' }}
         shell: bash
         working-directory: target
