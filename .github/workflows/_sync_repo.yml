@@ -25,6 +25,13 @@ jobs:
           ssh-key: ${{ secrets.SYNC_REPO_SSH_KEY_1 }}
           fetch-depth: 0
       - name: Checkout Source
+        if: ${{ github.event_name == 'pull_request' }}
+        uses: actions/checkout@v3
+        with:
+          path: 'source'
+          ref: ${{ github.head_ref }}
+      - name: Checkout Source
+        if: ${{ github.event_name != 'pull_request' }}
         uses: actions/checkout@v3
         with:
           path: 'source'
