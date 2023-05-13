@@ -87,10 +87,12 @@ jobs:
         shell: bash
         working-directory: target
         continue-on-error: true
+        env:
+          COMMIT_MSG: ${{ steps.get_commit_msg.outputs.commit_msg }}
         run: |
           git config --local user.name "github-actions[bot]"
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
-          git commit -m "${{ steps.get_commit_msg.outputs.commit_msg }}"
+          git commit -m "${COMMIT_MSG}"
           echo "::group::Commit detail"
           git show --pretty=short HEAD
           echo
